@@ -1,0 +1,50 @@
+import { FilterOperator, FilterSuffix, PaginateConfig } from 'nestjs-paginate';
+import { Customer } from '../entities/customer.entity';
+
+export const customerPaginationConfig: PaginateConfig<Customer> = {
+  sortableColumns: [
+    'firstName',
+    'lastName',
+    'email',
+    'phoneNumber',
+    'address',
+    'city',
+    'state',
+    'postalCode',
+    'country',
+  ],
+  defaultSortBy: [['firstName', 'ASC']],
+  searchableColumns: [
+    'firstName',
+    'lastName',
+    'email',
+    'phoneNumber',
+    'address',
+    'city',
+    'state',
+    'postalCode',
+    'country',
+  ],
+  select: [
+    'firstName',
+    'lastName',
+    'email',
+    'phoneNumber',
+    'address',
+    'city',
+    'state',
+    'postalCode',
+    'country',
+  ],
+  filterableColumns: {
+    firstName: [FilterOperator.EQ, FilterSuffix.NOT],
+    lastName: [FilterOperator.EQ, FilterSuffix.NOT],
+    email: [FilterOperator.EQ, FilterSuffix.NOT],
+    phoneNumber: [FilterOperator.EQ, FilterSuffix.NOT],
+    address: [FilterOperator.EQ, FilterSuffix.NOT],
+    city: [FilterOperator.EQ, FilterSuffix.NOT],
+    state: [FilterOperator.EQ, FilterSuffix.NOT],
+    postalCode: [FilterOperator.EQ, FilterSuffix.NOT],
+    country: [FilterOperator.EQ, FilterSuffix.NOT],
+  },
+};
