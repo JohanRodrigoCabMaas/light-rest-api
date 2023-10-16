@@ -11,6 +11,8 @@ import { TablesService } from './tables.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { PaginateQuery, Paginated, Paginate } from 'nestjs-paginate';
+import { Table } from './entities/table.entity';
 
 @ApiTags('tables')
 @Controller('tables')
@@ -23,8 +25,10 @@ export class TablesController {
   }
 
   @Get()
-  findAll() {
-    return this.tablesService.findAll();
+  findAll(
+    @Paginate() paginationQuery: PaginateQuery,
+  ): Promise<Paginated<Table>> {
+    return this.tablesService.findAll(paginationQuery);
   }
 
   @Get(':id')

@@ -13,8 +13,6 @@ import { DatabaseModule } from '@api-database/database.module';
 import { UsersModule } from './modules/users/users.module';
 import baseConfig from '@api-core/config/configuration';
 import databaseConfig from '@api-database/config/database.register';
-import { AccessControlModule } from 'nest-access-control';
-import { roles } from './app.roles';
 
 @Module({
   imports: [
@@ -32,7 +30,6 @@ import { roles } from './app.roles';
     ConfigurationsModule,
     AuthModule,
     UsersModule,
-    AccessControlModule.forRoles(roles),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -18,7 +18,6 @@ import { Customer } from './entities/customer.entity';
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
-
   @Get()
   getAll(
     @Paginate() paginationQuery: PaginateQuery,
@@ -30,17 +29,14 @@ export class CustomersController {
   create(@Body() createCustomerDto: CreateCustomerDto) {
     return this.customersService.create(createCustomerDto);
   }
-
   @Get(':id')
   getById(@Param('id') id: string) {
     return this.customersService.getById(+id);
   }
-
   @Put(':id')
   update(@Param('id') id: string, @Body() dto: UpdateCustomerDto) {
     return this.customersService.update(+id, dto);
   }
-
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.customersService.delete(+id);
