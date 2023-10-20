@@ -34,7 +34,10 @@ export class UsersService {
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this._userRepository.findOneBy({ id });
-    user.password = await this.encryptPassword(updateUserDto.password || '');
+    if (updateUserDto.password) {
+      user.password = await this.encryptPassword(updateUserDto.password);
+    }
+    Object.assign(user, updateUserDto);
     const updatedUser = await this._userRepository.save(user);
     return updatedUser;
   }

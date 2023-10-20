@@ -11,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@api-modules/auth/auth.module';
 import { DatabaseModule } from '@api-database/database.module';
 import { UsersModule } from './modules/users/users.module';
+import { UsuariosAnonimosModule } from './modules/usuarios-anonimos/usuarios-anonimos.module';
 import baseConfig from '@api-core/config/configuration';
 import databaseConfig from '@api-database/config/database.register';
 
@@ -30,6 +31,7 @@ import databaseConfig from '@api-database/config/database.register';
     ConfigurationsModule,
     AuthModule,
     UsersModule,
+    UsuariosAnonimosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
