@@ -6,6 +6,8 @@ import { Order } from './entities/order.entity';
 import { OrderRepository } from './order.repository';
 import { PaginateQuery, Paginated, paginate } from 'nestjs-paginate';
 import { orderPaginationConfig } from './config/ConfigOrders';
+import { getWeek } from 'date-fns';
+import { MoreThan } from 'typeorm';
 
 @Injectable()
 export class OrdersService {
@@ -14,9 +16,22 @@ export class OrdersService {
     private readonly orderRepository: OrderRepository,
   ) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  create(createOrderDto: CreateOrderDto) {
-    const orderCreated = this.orderRepository.create(createOrderDto);
-    return this.orderRepository.save(orderCreated);
+  async create(createOrderDto: CreateOrderDto) {
+    const order = this.orderRepository.create(createOrderDto);
+    const currentWeek = getWeek(new Date());
+    order.weeklyOrderCount = 1;
+    const existingOrders = await this.orderRepository.find({
+      where: { weeklyOrderCount: MoreThan(0) },
+    });
+
+    existingOrders.forEach((existingOrder) => {
+      if (getWeek(existingOrder.createdAt) === currentWeek) {
+        order.weeklyOrderCount += 1;
+      }
+    });
+
+    await this.orderRepository.save(order);
+    return order;
   }
 
   findAll(paginateQuery: PaginateQuery): Promise<Paginated<Order>> {

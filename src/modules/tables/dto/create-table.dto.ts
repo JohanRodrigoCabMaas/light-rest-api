@@ -4,4 +4,5 @@ export class CreateTableDto {
   type: string;
   numberOfChairs: string;
   isActive: boolean;
+  color: string;
 }

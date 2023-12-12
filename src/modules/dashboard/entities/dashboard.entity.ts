@@ -6,10 +6,7 @@ export class Dashboard {
   id: number;
 
   @Column()
-  dateName: string;
-
-  @Column()
-  total: string;
+  totalSum: number;
 
   @Column({ default: true })
   isActive: boolean;

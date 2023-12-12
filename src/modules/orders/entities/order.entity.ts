@@ -10,9 +10,6 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  identifierNumber: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -21,4 +18,7 @@ export class Order {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @Column({ default: 0 }) // Valor predeterminado a 0
+  weeklyOrderCount: number;
 }

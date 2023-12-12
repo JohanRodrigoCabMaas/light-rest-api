@@ -6,6 +6,8 @@ import { Product } from './entities/product.entity';
 import { PaginateQuery, Paginated, paginate } from 'nestjs-paginate';
 import { productPaginationConfig } from './config/configProducts';
 import { ProductRepository } from './producto.repository';
+import { unlink } from 'fs/promises';
+import { Express } from 'express';
 
 @Injectable()
 export class ProductsService {
@@ -13,10 +15,33 @@ export class ProductsService {
     @InjectRepository(Product)
     private readonly productRepository: ProductRepository,
   ) {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async create(createProductDto: CreateProductDto) {
+
+  async create(createProductDto: CreateProductDto, image: Express.Multer.File) {
     const productCreated = this.productRepository.create(createProductDto);
+    if (image) {
+      productCreated.imagePath = image.path;
+    }
     return this.productRepository.save(productCreated);
+  }
+
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+    image: Express.Multer.File,
+  ) {
+    const product = await this.productRepository.findOneBy({ id });
+    if (!product) {
+      return null;
+    }
+
+    if (image) {
+      if (product.imagePath) {
+        await unlink(product.imagePath);
+      }
+      product.imagePath = image.path;
+    }
+
+    return this.productRepository.save({ ...product, ...updateProductDto });
   }
 
   async findAll(paginationQuery: PaginateQuery): Promise<Paginated<Product>> {
@@ -30,14 +55,12 @@ export class ProductsService {
   async findOne(id: number) {
     return this.productRepository.findOneBy({ id });
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async update(id: number, updateProductDto: UpdateProductDto) {
-    const product = await this.productRepository.findOneBy({ id });
-    return this.productRepository.save({ ...product, ...updateProductDto });
-  }
 
   async delete(id: number) {
     const product = await this.productRepository.findOneBy({ id });
+    if (product.imagePath) {
+      await unlink(product.imagePath);
+    }
     return this.productRepository.save({ ...product, isActive: false });
   }
 }

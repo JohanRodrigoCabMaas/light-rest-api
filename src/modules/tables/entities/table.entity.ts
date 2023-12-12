@@ -9,6 +9,8 @@ export class Table {
   @Column()
   type: string;
   @Column()
+  color: string;
+  @Column()
   numberOfChairs: string;
   @Column({ default: true })
   isActive: boolean;

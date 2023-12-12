@@ -15,14 +15,11 @@ export class Product {
   amount: number;
 
   @Column()
-  size: string;
-
-  @Column()
   price: number;
-
-  @Column()
-  availability: string;
 
   @Column({ default: true })
   isActive: boolean;
+
+  @Column({ nullable: true })
+  imagePath: string;
 }

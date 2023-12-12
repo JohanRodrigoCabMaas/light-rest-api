@@ -2,12 +2,12 @@ import { FilterOperator, FilterSuffix, PaginateConfig } from 'nestjs-paginate';
 import { Order } from '../entities/order.entity';
 
 export const orderPaginationConfig: PaginateConfig<Order> = {
-  sortableColumns: ['identifierNumber', 'total'],
-  defaultSortBy: [['identifierNumber', 'ASC']],
-  searchableColumns: ['identifierNumber', 'total'],
-  select: ['identifierNumber', 'total'],
+  sortableColumns: ['total', 'weeklyOrderCount'],
+  defaultSortBy: [['weeklyOrderCount', 'ASC']],
+  searchableColumns: ['total', 'createdAt'],
+  select: ['total', 'createdAt'],
   filterableColumns: {
-    identifierNumber: [FilterOperator.EQ, FilterSuffix.NOT],
     total: [FilterOperator.EQ, FilterSuffix.NOT],
+    createdAt: [FilterOperator.EQ, FilterSuffix.NOT],
   },
 };

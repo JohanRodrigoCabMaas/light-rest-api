@@ -3,8 +3,7 @@ export class CreateProductDto {
   productName: string;
   description: string;
   amount: number;
-  size: string;
   price: number;
-  availability: string;
   isActive: boolean;
+  imagePath: string;
 }
