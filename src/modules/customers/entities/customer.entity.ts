@@ -5,7 +5,7 @@ export class Customer {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'first_name' })
+  @Column()
   firstName: string;
 
   @Column()
@@ -14,7 +14,7 @@ export class Customer {
   @Column({ unique: true })
   email: string;
 
-  @Column({ name: 'phone_number' })
+  @Column()
   phoneNumber: string;
 
   @Column({ nullable: true })

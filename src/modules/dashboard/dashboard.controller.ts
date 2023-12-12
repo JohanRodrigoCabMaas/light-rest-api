@@ -11,6 +11,8 @@ import { DashboardService } from './dashboard.service';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
 import { UpdateDashboardDto } from './dto/update-dashboard.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Paginate, PaginateQuery, Paginated } from 'nestjs-paginate';
+import { Dashboard } from './entities/dashboard.entity';
 
 @ApiTags('dashboard')
 @Controller('dashboard')
@@ -23,8 +25,10 @@ export class DashboardController {
   }
 
   @Get()
-  findAll() {
-    return this.dashboardService.findAll();
+  findAll(
+    @Paginate() paginateQuery: PaginateQuery,
+  ): Promise<Paginated<Dashboard>> {
+    return this.dashboardService.findAll(paginateQuery);
   }
 
   @Get(':id')

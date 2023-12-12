@@ -1,1 +1,4 @@
-export class CreateDashboardDto {}
+export class CreateDashboardDto {
+  id: number;
+  totalSum: number;
+}

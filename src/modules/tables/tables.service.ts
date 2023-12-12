@@ -1,27 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Table } from './entities/table.entity';
+import { TableRepository } from './table.repository';
+import { PaginateQuery, Paginated, paginate } from 'nestjs-paginate';
+import { tablePaginationConfig } from './config/configTable';
 
 @Injectable()
 export class TablesService {
+  constructor(
+    @InjectRepository(Table)
+    private readonly tableRepository: TableRepository,
+  ) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create(createTableDto: CreateTableDto) {
-    return 'This action adds a new table';
+    const tableCreated = this.tableRepository.create(createTableDto);
+    return this.tableRepository.save(tableCreated);
   }
 
-  findAll() {
-    return `This action returns all tables`;
+  async findAll(paginationQuery: PaginateQuery): Promise<Paginated<Table>> {
+    return paginate(
+      paginationQuery,
+      this.tableRepository,
+      tablePaginationConfig,
+    );
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} table`;
+  async findOne(id: number) {
+    return this.tableRepository.findOneBy({ id });
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: number, updateTableDto: UpdateTableDto) {
-    return `This action updates a #${id} table`;
+  async update(id: number, updateTableDto: UpdateTableDto) {
+    const table = await this.tableRepository.findOneBy({ id });
+    return this.tableRepository.save({ ...table, ...updateTableDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} table`;
+  async remove(id: number) {
+    const table = await this.tableRepository.findOneBy({ id });
+    return this.tableRepository.save({ ...table, isActive: false });
   }
 }

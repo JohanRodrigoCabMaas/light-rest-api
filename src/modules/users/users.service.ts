@@ -34,7 +34,10 @@ export class UsersService {
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this._userRepository.findOneBy({ id });
-    user.password = await this.encryptPassword(updateUserDto.password || '');
+    if (updateUserDto.password) {
+      user.password = await this.encryptPassword(updateUserDto.password);
+    }
+    Object.assign(user, updateUserDto);
     const updatedUser = await this._userRepository.save(user);
     return updatedUser;
   }
@@ -45,7 +48,18 @@ export class UsersService {
   }
 
   async findByCreadentials(loginDto: LoginDto) {
-    return this._userRepository.findOneBy(loginDto);
+    const { username, password, role } = loginDto;
+    const user = await this._userRepository.findOne({
+      where: { username, role },
+    });
+
+    if (user) {
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (isPasswordValid) {
+        return user;
+      }
+    }
+    return null;
   }
   //funcion para mantener el encriptado al actualizar
   private async encryptPassword(password: string): Promise<string> {

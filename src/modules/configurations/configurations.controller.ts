@@ -11,6 +11,8 @@ import { ConfigurationsService } from './configurations.service';
 import { CreateConfigurationDto } from './dto/create-configuration.dto';
 import { UpdateConfigurationDto } from './dto/update-configuration.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Paginate, PaginateQuery, Paginated } from 'nestjs-paginate';
+import { Configuration } from './entities/configuration.entity';
 
 @ApiTags('configurations')
 @Controller('configurations')
@@ -23,8 +25,10 @@ export class ConfigurationsController {
   }
 
   @Get()
-  findAll() {
-    return this.configurationsService.findAll();
+  findAll(
+    @Paginate() paginationQuery: PaginateQuery,
+  ): Promise<Paginated<Configuration>> {
+    return this.configurationsService.findAll(paginationQuery);
   }
 
   @Get(':id')
@@ -41,7 +45,7 @@ export class ConfigurationsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.configurationsService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.configurationsService.delete(+id);
   }
 }

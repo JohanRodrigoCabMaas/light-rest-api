@@ -2,6 +2,12 @@ import { User } from '@api-modules/users/entities/user.entity';
 import { DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { Customer } from '@/modules/customers/entities/customer.entity';
+import { Product } from '@/modules/products/entities/product.entity';
+import { Table } from '@/modules/tables/entities/table.entity';
+import { Order } from '@/modules/orders/entities/order.entity';
+import { Dashboard } from '@/modules/dashboard/entities/dashboard.entity';
+import { UsuarioAnonimo } from '@/modules/usuarios-anonimos/entities/usuarios-anonimos.entity';
+import { Configuration } from '@/modules/configurations/entities/configuration.entity';
 
 dotenv.config();
 
@@ -12,7 +18,16 @@ const config: DataSourceOptions = {
   username: process.env.TYPEORM_USERNAME,
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE,
-  entities: [User, Customer],
+  entities: [
+    User,
+    Customer,
+    Product,
+    Table,
+    Order,
+    Dashboard,
+    UsuarioAnonimo,
+    Configuration,
+  ],
   synchronize: false,
   migrationsTableName: 'migrations',
   migrations: ['dist/database/migrations/*{.ts,.js}'],

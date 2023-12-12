@@ -1,27 +1,29 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { initSwagger } from './app.swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = process.env.PORT || 3000;
-  const logger = new Logger('Bootstrap App Init');
-
-  initSwagger(app);
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-    }),
-  );
+  const options = new DocumentBuilder()
+    .setTitle('Restaurant')
+    .setDescription('The cats API description')
+    .setVersion('1.0')
+    .addTag('Restaurant')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('docs', app, document, {
+    explorer: true,
+    swaggerOptions: {
+      filter: true,
+      showRequestDuration: true,
+    },
+  });
 
   app.enableCors();
-
-  await app.listen(port);
-
-  logger.log(`App are listen on port ${port}`);
-  logger.log(`Server is running at ${await app.getUrl()}`);
+  app.use('/uploads', express.static('uploads'));
+  await app.listen(3000);
+  console.log(__dirname);
 }
 
 bootstrap();
